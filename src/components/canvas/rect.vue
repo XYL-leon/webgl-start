@@ -19,7 +19,7 @@ onMounted(() => {
   if (container.value.getContext) {
     // 获取渲染上下文和绘制功能;
     ctx = container.value.getContext("2d");
-    console.log(ctx);
+    // console.log(ctx);
     draw();
   } else {
     console.log("您的浏览器不支持canvas");

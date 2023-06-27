@@ -17,7 +17,7 @@ function draw() {
         var startAngle = 0; // 开始点
         var endAngle = Math.PI + (Math.PI * j) / 2; // 结束点
         var anticlockwise = i % 2 == 0 ? false : true; // 顺时针或逆时针
-        console.log(j, i, endAngle, anticlockwise);
+        // console.log(j, i, endAngle, anticlockwise);
         ctx.arc(x, y, radius, startAngle, endAngle, anticlockwise);
 
         if (i > 1) {
