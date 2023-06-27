@@ -22,10 +22,21 @@ function drawPort(label, lineColor, iconBG) {
     const height = 32;
     const margin = 5;
     const radius = height / 2;
-    ctx.strokeStyle = lineColor;
     ctx.fillStyle = iconBG;
 
+    ctx.beginPath();
+    ctx.strokeStyle = "rgba(255, 255, 255, 1)";
+    ctx.lineWidth = 32;
+    ctx.lineJoin = "round";
+    ctx.moveTo(margin + radius, height / 2 + margin);
+    ctx.lineTo(width + margin + radius, height / 2 + margin);
+    ctx.closePath();
+    ctx.stroke();
+
     // 上横线
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = lineColor;
+
     ctx.beginPath();
     ctx.moveTo(margin + radius, margin);
     ctx.lineTo(width + margin + radius, margin);
@@ -105,5 +116,6 @@ onMounted(() => {
   height: 52px;
   margin: 100px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: rgb(77, 228, 72);
 }
 </style>
