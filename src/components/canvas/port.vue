@@ -18,7 +18,8 @@ function drawPort(label, lineColor, iconBG) {
       ) + 10;
 
     console.log(textWidth);
-    const width = textWidth < 58 ? 58 : textWidth;
+    // const width = textWidth < 58 ? 58 : textWidth;
+    const width = 108;
     const height = 32;
     const margin = 5;
     const radius = height / 2;
@@ -74,6 +75,9 @@ function drawPort(label, lineColor, iconBG) {
     ctx.beginPath();
     ctx.arc(margin + radius, height / 2 + margin, 12, 0, 360, false);
     ctx.fill();
+
+    // ctx.drawImage(img, 0, 0, 24, 24);
+
     // 文字
     ctx.fillText(
       label,
@@ -105,14 +109,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <canvas id="tutorial" ref="container" width="100" height="52"> </canvas>
+  <canvas id="tutorial" ref="container" width="150" height="52"> </canvas>
 </template>
 <style scoped>
 #tutorial {
   display: block;
   /* border: 1px solid black; */
   border: 0;
-  width: 100px;
+  width: 150px;
   height: 52px;
   margin: 100px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
