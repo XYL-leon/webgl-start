@@ -1,23 +1,28 @@
 <script setup>
-// import WebGL from "./components/webgl.vue";
+import ThreeInit from "./components/three/init.vue";
 
-import CanvasRotate from "./components/canvas/rotate.vue";
-import CanvasRect from "./components/canvas/rect.vue";
-import CanvasLine from "./components/canvas/line.vue";
-import CanvasCircle from "./components/canvas/circle.vue";
+// import WebGL from "./components/webgl/webgl.vue";
 
-import CanvasRotate2 from "./components/canvas/rotate2.vue";
-import Port from "./components/canvas/port.vue";
+// import CanvasRotate from "./components/canvas/rotate.vue";
+// import CanvasRect from "./components/canvas/rect.vue";
+// import CanvasLine from "./components/canvas/line.vue";
+// import CanvasCircle from "./components/canvas/circle.vue";
+
+// import CanvasRotate2 from "./components/canvas/rotate2.vue";
+// import Port from "./components/canvas/port.vue";
 </script>
 
 <template>
   <div class="container">
-    <!-- <CanvasRotate2 /> -->
-    <Port />
-    <CanvasCircle />
-    <CanvasLine />
-    <CanvasRect />
+    <ThreeInit />
+
     <!-- <WebGL /> -->
-    <CanvasRotate />
+
+    <!-- <CanvasRotate2 /> -->
+    <!-- <Port /> -->
+    <!-- <CanvasCircle /> -->
+    <!-- <CanvasLine /> -->
+    <!-- <CanvasRect /> -->
+    <!-- <CanvasRotate /> -->
   </div>
 </template>
