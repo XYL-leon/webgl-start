@@ -47,6 +47,10 @@ function drawShipBreadthAndLength(point, rotate) {
   // const length = 136;
   const breadth = 60;
   const length = 333;
+  const sternLength = length / 25;
+  const bowLength = length / 8; // 船首
+  const bodyLength = length - sternLength - bowLength;
+  // const sternAndBowLength = sternLength + bowLength;
   // const breadth = 26;
   // const length = 108;
   // const breadth = 32 *2;
@@ -85,18 +89,25 @@ function drawShipBreadthAndLength(point, rotate) {
    * 0度向北
    * */
   // 尾部
-  ctx.moveTo(-breadth / 2, length / 2);
-  ctx.lineTo(-(breadth / 4), length / 2 + length / 25);
-  ctx.lineTo(breadth / 4, length / 2 + length / 25);
-  ctx.lineTo(breadth / 2, length / 2);
-  // // 首
-  ctx.lineTo(breadth / 2, -length / 2);
-  ctx.lineTo(breadth / 5, -(length / 2 + length / 10));
-  ctx.lineTo(0, -(length / 2 + length / 8));
-  ctx.lineTo(-breadth / 5, -(length / 2 + length / 10));
-  ctx.lineTo(-breadth / 2, -length / 2);
+  ctx.moveTo(-breadth / 2, bodyLength / 2);
+  ctx.lineTo(-(breadth / 4), bodyLength / 2 + sternLength);
+  ctx.lineTo(breadth / 4, bodyLength / 2 + sternLength);
+  ctx.lineTo(breadth / 2, bodyLength / 2);
+  // 首
+  ctx.lineTo(breadth / 2, -bodyLength / 2);
+  ctx.lineTo(breadth / 5, -(bodyLength / 2 + length / 10));
+  ctx.lineTo(0, -(bodyLength / 2 + bowLength));
 
-  ctx.lineTo(-breadth / 2, length / 2);
+  // 航行状态
+  if (true) {
+    ctx.lineTo(0, -(bodyLength / 2 + bowLength + 20));
+    ctx.lineTo(0, -(bodyLength / 2 + bowLength));
+  }
+
+  ctx.lineTo(-breadth / 5, -(bodyLength / 2 + length / 10));
+  ctx.lineTo(-breadth / 2, -bodyLength / 2);
+
+  ctx.lineTo(-breadth / 2, bodyLength / 2);
 
   ctx.fillStyle = "rgb(255,0,0)";
   ctx.fill();
@@ -110,8 +121,8 @@ function drawShipBreadthAndLength(point, rotate) {
 onMounted(() => {
   init();
   // draw({ x: 150, y: 150 }, 0);
-  drawShipBreadthAndLength({ x: 250, y: 250 }, 223);
-  // drawShipBreadthAndLength({ x: 250, y: 250 }, 0);
+  // drawShipBreadthAndLength({ x: 250, y: 250 }, 223);
+  drawShipBreadthAndLength({ x: 250, y: 250 }, 0);
 });
 </script>
 
