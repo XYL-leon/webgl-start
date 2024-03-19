@@ -31,14 +31,14 @@ onMounted(() => {
   // 顶点着色器
   var vertexShaderSource = `
         void main(){
-            gl_PointSize = 20.0;
+            gl_PointSize = 30.0;
             gl_Position = vec4(0.0,0.0,0.0,1.0);
         }
     `;
   // 片元着色器
   var fragShaderSource = `
         void main(){
-            gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+            gl_FragColor = vec4(0.0,0.0,1.0,1.0);
         }
     `;
   // 初始化着色器
