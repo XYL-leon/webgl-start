@@ -2,6 +2,7 @@
 import { ref, onMounted, provide } from "vue";
 import Demo from "./demo.vue";
 import Start from "./modules/start.vue";
+import TWOD from "./modules/2d.vue";
 
 const canvasContainer = ref(null);
 let gl = ref();
@@ -13,6 +14,7 @@ onMounted(() => {
 </script>
 <template>
   <canvas ref="canvasContainer" class="webgl" width="500" height="500"></canvas>
-  <Demo />
-  <Start />
+  <!-- <Demo />
+  <Start /> -->
+  <TWOD />
 </template>

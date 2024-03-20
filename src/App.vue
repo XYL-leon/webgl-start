@@ -1,5 +1,5 @@
 <script setup>
-import ThreeInit from "./components/three/init.vue";
+// import ThreeInit from "./components/three/init.vue";
 
 import WebGL from "./components/webgl/webgl.vue";
 
