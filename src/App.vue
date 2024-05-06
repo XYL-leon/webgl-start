@@ -1,7 +1,7 @@
 <script setup>
-// import ThreeInit from "./components/three/init.vue";
+import ThreeInit from "./components/three/init.vue";
 
-import WebGL from "./components/webgl/webgl.vue";
+// import WebGL from "./components/webgl/webgl.vue";
 
 // import RenderFleet from "./components/canvas/renderFleet.vue";
 // import CanvasRotate from "./components/canvas/rotate.vue";
@@ -15,9 +15,9 @@ import WebGL from "./components/webgl/webgl.vue";
 
 <template>
   <div class="container">
-    <!-- <ThreeInit /> -->
+    <ThreeInit />
 
-    <WebGL />
+    <!-- <WebGL /> -->
 
     <!-- <RenderFleet /> -->
     <!-- <CanvasRotate2 /> -->

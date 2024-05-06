@@ -8,23 +8,51 @@ import * as THREE from "three";
 const firstThreeJS = ref();
 
 class FirstDemo {
-  constructor() {}
-  render() {
+  width;
+  height;
+
+  renderer;
+  camera;
+  scene;
+
+  testY;
+
+  constructor(params) {
+    this.testY = 200;
+
+    this.width = params.width;
+    this.height = params.height;
+    this.init();
+  }
+  init() {
     // demo from https://www.three3d.cn/docs/index.html#manual/zh/introduction/Drawing-lines
-    const renderer = new THREE.WebGLRenderer({ canvas: firstThreeJS.value });
+    this.renderer = new THREE.WebGLRenderer({ canvas: firstThreeJS.value });
 
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      1,
-      500
-    );
-    camera.position.set(0, 0, 100);
-    camera.lookAt(0, 0, 0);
+    this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 1, 500);
+    this.camera.position.set(0, 0, 100);
+    this.camera.lookAt(0, 0, 0);
 
-    const scene = new THREE.Scene();
+    this.scene = new THREE.Scene();
+  }
+  render() {
+    // this.drawLine();
+    this.draw3DBox();
+  }
+  clear() {
+    console.log(this.scene);
+    this.renderer.clear();
+  }
+  changeCamera(x, y, z) {
+    this.camera = new THREE.PerspectiveCamera(30, this.width / this.height, 1, 3000);
 
-    //create a blue LineBasicMaterial
+    // this.camera.position.set(200, (this.testY += 10), 200);
+    this.testY += 10;
+    if (this.testY > 360) this.testY = 0;
+    this.camera.position.set(this.testY, this.testY, 200);
+    this.camera.lookAt(x, y, z);
+  }
+  //create a blue LineBasicMaterial
+  drawLine() {
     const material = new THREE.LineBasicMaterial({ color: 0x0000ff });
 
     const points = [];
@@ -36,24 +64,66 @@ class FirstDemo {
 
     const line = new THREE.Line(geometry, material);
 
-    scene.add(line);
-    renderer.render(scene, camera);
+    this.scene.add(line);
+    this.renderer.render(this.scene, this.camera);
   }
+  draw3DBox() {
+    // 几何体 长方体
+    const geometry = new THREE.BoxGeometry(20, 20, 20);
+    // 材质
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xff0000,
+    });
+    // 网格模型
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.position.set(0, 0, 0);
+    this.scene.add(mesh);
+
+    // this.changeCamera(mesh.position);
+    this.changeCamera(0, 0, 0);
+
+    this.renderer.render(this.scene, this.camera);
+  }
+}
+
+function listeningToScreenSize(firstDemo) {
+  window.addEventListener("resize", function () {
+    firstThreeJS.value.width = window.innerWidth;
+    firstThreeJS.value.height = window.innerHeight;
+    nextTick(() => {
+      firstDemo.clear();
+      firstDemo.render();
+    });
+  });
 }
 
 onMounted(async () => {
   await nextTick();
-  const firstDemo = new FirstDemo();
+  firstThreeJS.value.width = window.innerWidth;
+  firstThreeJS.value.height = window.innerHeight;
+
+  const firstDemo = new FirstDemo({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
   firstDemo.render();
+
+  listeningToScreenSize(firstDemo);
+
+  document.documentElement.onclick = function () {
+    console.log(1111111);
+  };
 });
 </script>
 <template>
-  <canvas id="first_threejs" ref="firstThreeJS" width="500" height="500"></canvas>
+  <canvas id="first_threejs" ref="firstThreeJS"></canvas>
 </template>
 
 <style lang="scss">
 #first_threejs {
-  width: 500px;
-  height: 500px;
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 </style>
