@@ -23,6 +23,12 @@ class FirstDemo {
     this.width = params.width;
     this.height = params.height;
     this.init();
+    this.addAxis();
+  }
+  // 坐标轴
+  addAxis() {
+    const axesHelper = new THREE.AxesHelper(100);
+    this.scene.add(axesHelper);
   }
   init() {
     // demo from https://www.three3d.cn/docs/index.html#manual/zh/introduction/Drawing-lines
@@ -33,6 +39,9 @@ class FirstDemo {
     this.camera.lookAt(0, 0, 0);
 
     this.scene = new THREE.Scene();
+
+    const light = new THREE.HemisphereLight(0xffffff, 0x080820, 1);
+    this.scene.add(light);
   }
   render(containerWidth, containerHeight) {
     // this.drawLine();
@@ -89,13 +98,18 @@ class FirstDemo {
     const _height = containerHeight ? containerHeight : this.height;
     // 几何体 长方体
     const geometry = new THREE.BoxGeometry(20, 20, 20);
-    // 材质
-    const material = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-    });
+    // 材质 不受光照影响
+    // const material = new THREE.MeshBasicMaterial({
+    //   color: 0xff0000,
+    //   transparent: true,
+    //   opacity: 0.5,
+    // });
+    // 材质 受光照影响
+    const material = new THREE.MeshLambertMaterial({ color: 0xff0000 });
+
     // 网格模型
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.position.set(0, 0, 0);
+    mesh.position.set(20, 0, 0);
     this.scene.add(mesh);
 
     // this.changeCamera(mesh.position);
