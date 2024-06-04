@@ -1,6 +1,8 @@
 <script setup>
-import { onMounted, nextTick, ref, setTransitionHooks } from "vue";
+import { onMounted, nextTick, ref } from "vue";
 import * as THREE from "three";
+// 相机控件
+import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 // 场景 Scene
 // 相机 Camera
 // 渲染器 Renderer
@@ -42,6 +44,8 @@ class FirstDemo {
 
     const light = new THREE.HemisphereLight(0xffffff, 0x080820, 1);
     this.scene.add(light);
+
+    this.addListener();
   }
   render(containerWidth, containerHeight) {
     // this.drawLine();
@@ -76,6 +80,15 @@ class FirstDemo {
     this.camera.lookAt(x, y, z);
     this.width = containerWidth;
     this.height = containerHeight;
+  }
+  addListener() {
+    const controls = new OrbitControls(this.camera, this.renderer.domElement);
+    const that = this;
+    controls.addEventListener("change", function (e) {
+      that.camera.position.set(50, 50, 50);
+
+      that.renderer.render(that.scene, that.camera);
+    });
   }
   //create a blue LineBasicMaterial
   drawLine() {
@@ -140,11 +153,11 @@ onMounted(async () => {
 
   firstDemo.render();
 
-  listeningToScreenSize(firstDemo);
+  // listeningToScreenSize(firstDemo);
 
-  document.documentElement.onclick = function () {
-    console.log("click");
-  };
+  // document.documentElement.onclick = function () {
+  //   console.log("click");
+  // };
 });
 </script>
 <template>
