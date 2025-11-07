@@ -1,5 +1,5 @@
 <script setup>
-import ThreeInit from "./components/three/init.vue";
+// import ThreeInit from "./components/three/init.vue";
 
 // import WebGL from "./components/webgl/webgl.vue";
 
@@ -8,14 +8,20 @@ import ThreeInit from "./components/three/init.vue";
 // import CanvasRect from "./components/canvas/rect.vue";
 // import CanvasLine from "./components/canvas/line.vue";
 // import CanvasCircle from "./components/canvas/circle.vue";
+// import RoundedRectangle from "./components/canvas/roundedRectangle.vue";
+// import CanvasImg from "./components/canvas/img.vue";
+// import Colors from './components/canvas/colors.vue';
+// import Marker from "./components/canvas/marker.vue";
 
 // import CanvasRotate2 from "./components/canvas/rotate2.vue";
 // import Port from "./components/canvas/port.vue";
+
+import VerticalProfile from "./components/echarts/verticalProfile.vue";
 </script>
 
 <template>
   <div class="container">
-    <ThreeInit />
+    <!-- <ThreeInit /> -->
 
     <!-- <WebGL /> -->
 
@@ -26,5 +32,11 @@ import ThreeInit from "./components/three/init.vue";
     <!-- <CanvasLine /> -->
     <!-- <CanvasRect /> -->
     <!-- <CanvasRotate /> -->
+    <!-- <RoundedRectangle /> -->
+    <!-- <CanvasImg /> -->
+    <!-- <Colors /> -->
+    <!-- <Marker /> -->
+
+    <VerticalProfile />
   </div>
 </template>

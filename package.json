@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "echarts": "^6.0.0",
     "gl-matrix": "^3.4.3",
     "sass": "^1.57.1",
     "three": "^0.162.0",
