@@ -17,6 +17,12 @@
 // import Port from "./components/canvas/port.vue";
 
 import VerticalProfile from "./components/echarts/verticalProfile.vue";
+
+import Plot from "./components/observablePlot/first.vue";
+import Volcano from "./components/observablePlot/volcano.vue";
+import BlurredContours from "./components/observablePlot/blurredContours.vue";
+// import Raster from "./components/observablePlot/raster.vue";
+
 </script>
 
 <template>
@@ -37,6 +43,10 @@ import VerticalProfile from "./components/echarts/verticalProfile.vue";
     <!-- <Colors /> -->
     <!-- <Marker /> -->
 
-    <VerticalProfile />
+    <!-- <VerticalProfile /> -->
+    <!-- <Plot /> -->
+    <!-- <Volcano /> -->
+    <BlurredContours />
+    <!-- <Raster /> -->
   </div>
 </template>
