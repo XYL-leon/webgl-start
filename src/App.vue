@@ -21,6 +21,9 @@ import VerticalProfile from "./components/echarts/verticalProfile.vue";
 import Plot from "./components/observablePlot/first.vue";
 import Volcano from "./components/observablePlot/volcano.vue";
 import BlurredContours from "./components/observablePlot/blurredContours.vue";
+import RasterMarkDemo from "./components/observablePlot/rasterMarkDemo.vue";
+import RasterDemo from "./components/observablePlot/rasterDemo.vue";
+// import IGRF90Contours from "./components/observablePlot/IGRF90Contours.vue"; // 废弃
 // import Raster from "./components/observablePlot/raster.vue";
 
 </script>
@@ -47,6 +50,9 @@ import BlurredContours from "./components/observablePlot/blurredContours.vue";
     <!-- <Plot /> -->
     <!-- <Volcano /> -->
     <BlurredContours />
+    <RasterMarkDemo />
+    <!-- <RasterDemo /> -->
+    <!-- <IGRF90Contours /> -->
     <!-- <Raster /> -->
   </div>
 </template>

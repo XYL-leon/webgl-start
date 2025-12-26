@@ -1,0 +1,69 @@
+<template>
+  <div ref="plotContainer" class="jilin-visualization"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as Plot from "@observablehq/plot";
+
+const plotContainer = ref(null);
+
+function render() {
+  if (!plotContainer.value) return;
+  const grid = JSON.parse(`{
+    "width": 10,
+    "height": 10,
+    "values": [
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+        0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+        0,  2,  4,  6,  8, 10, 12, 14, 16, 18,
+        0,  3,  6,  9, 12, 15, 18, 21, 24, 27,
+        0,  4,  8, 12, 16, 20, 24, 28, 32, 36,
+        0,  5, 10, 15, 20, 25, 30, 35, 40, 45,
+        0,  6, 12, 18, 24, 30, 36, 42, 48, 54,
+        0,  7, 14, 21, 28, 35, 42, 49, 56, 63,
+        0,  8, 16, 24, 32, 40, 48, 56, 64, 72,
+        0,  9, 18, 27, 36, 45, 54, 63, 72, 81
+    ]
+  }`);
+//   const plot = Plot.plot({
+//     grid: true,
+//     x: { domain: [0, grid.width], label: "column" },
+//     y: { domain: [0, grid.height], label: "row" },
+//     marks: [
+//       Plot.text(grid.values, {
+//         text: Plot.identity,
+//         fill: Plot.identity,
+//         x: (d, i) => (i % grid.width) + 0.5,
+//         y: (d, i) => Math.floor(i / grid.width) + 0.5,
+//       }),
+//     ],
+//   });
+  const plot = Plot.plot({
+    marks: [
+      Plot.raster(grid.values, {
+        width: grid.width,
+        height: grid.height,
+        imageRendering: "pixelated", // to better show the grid
+      }),
+      Plot.text(grid.values, {
+        text: Plot.identity,
+        fill: "white",
+        x: (d, i) => (i % grid.width) + 0.5,
+        y: (d, i) => Math.floor(i / grid.width) + 0.5,
+      }),
+    ],
+  });
+
+  plotContainer.value.appendChild(plot);
+}
+onMounted(async () => {
+  render();
+});
+</script>
+
+<style lang="scss" scoped>
+.jilin-visualization {
+  margin: 0 auto;
+}
+</style>

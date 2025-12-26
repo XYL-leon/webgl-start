@@ -1,5 +1,6 @@
 <template>
-  <h3 class="subtitle">Contour mark</h3>
+  <h3 class="subtitle">Raster mark</h3>
+  <h4>Interpolate method {{ interpolateMethod }}</h4>
   <div ref="plotContainer" class="jilin-visualization"></div>
 </template>
 
@@ -25,12 +26,27 @@ import axios from "axios";
 
 const list = [temp, temp1, temp2, temp3, temp4];
 const plotContainer = ref(null);
+const interpolateMethods = [
+  // "bilinear", // 双线性插值
+  // "bicubic",  // 双立方插值
+  "barycentric", // 重心插值
+  // "catmull-rom", // Catmull-Rom样条插值
+  // "hermite", // Hermite样条插值
+  // "linear", // 线性插值
+  // "monotone", // 单调插值
+  // "natural", // 自然邻域插值
+  "nearest", // 最近邻插值
+  "random-walk", // 随机游走插值
+];
+const interpolateMethod = interpolateMethods[1];
 
 function render(index) {
   // let dom = document.getElementsByTagName("svg")[0];
   // if (dom) {
   //   dom.remove();
   // }
+  // setTimeout(() => {
+  // }, 1000);
   // const url =
   //   "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1,2&elementsCode=temp&code=temp_real";
   // const res = await axios.get(url);
@@ -70,20 +86,35 @@ function render(index) {
       range: colorRange,
       legend: false,
     },
+    // color: {
+    //   type: "diverging",
+    // },
 
     marks: [
       // 1. 等高线热力图
-      Plot.contour(_data, {
-        // smooth: false,
+      // Plot.contour(_data, {
+      //   // smooth: false,
+      //   x: "lon",
+      //   y: "lat",
+      //   fill: "value",
+      //   interval: 4, // 等高线间隔（根据数据调整）
+      //   // blur: 0.1,
+      //   stroke: "rgba(0,0,0,0.2)",
+      //   strokeWidth: 0.5,
+      //   clip: jilin,
+      // }),
+      Plot.raster(_data, {
         x: "lon",
         y: "lat",
         fill: "value",
-        interval: 4, // 等高线间隔（根据数据调整）
-        // blur: 0.1,
-        stroke: "rgba(0,0,0,0.2)",
-        strokeWidth: 0.5,
+        interpolate: interpolateMethod,
+        // interpolate: 'none', // 将每个样本分配给包含它的像素,可配合pixelSize使用
+        pixelSize: 2,
+        // blur: 5,
         clip: jilin,
       }),
+      // .plot({ color: { type: "diverging" } }),
+
       // Plot.dot(_data, {
       //   x: "lon",
       //   y: "lat",
