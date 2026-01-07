@@ -21,8 +21,9 @@ import temp4 from "./temp-11191730.json"; // 温度数据
 // import rhu from "./rhu-11181715.json";
 // import rhu from "./rhu-11182128.json";
 import jilin from "./jilin_province_boundary.json";
-import { TempLegend } from "./legends";
+import { TempLegend, VisLegend, RhuLegend } from "./legends";
 import axios from "axios";
+import { liveData } from "../../api/meteo.js";
 
 const list = [temp, temp1, temp2, temp3, temp4];
 const plotContainer = ref(null);
@@ -40,18 +41,30 @@ const interpolateMethods = [
 ];
 const interpolateMethod = interpolateMethods[1];
 
-function render(index) {
+async function render(index) {
   // let dom = document.getElementsByTagName("svg")[0];
   // if (dom) {
   //   dom.remove();
   // }
-  // setTimeout(() => {
-  // }, 1000);
-  // const url =
-  //   "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1,2&elementsCode=temp&code=temp_real";
-  // const res = await axios.get(url);
+  const legend = TempLegend;
+  const eleCode = "vis";
+  // const eleCode = "rhu";
+  const eleTypeCode = "vis_real";
+  // const eleTypeCode = "rhu_relative";
 
-  const res = { data: list[index] };
+  // const url =
+  //   "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1&elementsCode=" +
+  //   eleCode +
+  //   "&code=" +
+  //   eleTypeCode;
+  // const res = await axios.get(url);
+  const res = await liveData({
+    cntyCode: 220000,
+    siteTypeCode: 1,
+    elementsCode: "temp",
+    code: "temp_real",
+  });
+  // const res = { data: list[index] };
   if (!plotContainer.value) return;
   var _data = res.data.data.filter((item) => item.value !== null);
   _data.map((item) => {
@@ -60,12 +73,13 @@ function render(index) {
     // console.log(item.value);
   });
 
-  const colorDomain = TempLegend.colors.map((item) => item[0]);
-  const colorRange = TempLegend.colors.map((item) => item[1]);
+  const colorDomain = legend.colors.map((item) => item[0]);
+  const colorRange = legend.colors.map((item) => item[1]);
 
-  colorRange.unshift(TempLegend.colors[0][1]);
+  colorRange.unshift(legend.colors[0][1]);
 
   console.time("time");
+
   const plot = Plot.plot({
     // 视图尺寸（与容器一致）
     width: 1062,
@@ -110,19 +124,18 @@ function render(index) {
         interpolate: interpolateMethod,
         // interpolate: 'none', // 将每个样本分配给包含它的像素,可配合pixelSize使用
         pixelSize: 2,
-        // blur: 5,
+        // blur: 1,
         clip: jilin,
       }),
-      // .plot({ color: { type: "diverging" } }),
 
-      // Plot.dot(_data, {
-      //   x: "lon",
-      //   y: "lat",
-      //   r: 2, // 点大小
-      //   fill: "value", // 用value映射颜色
-      //   stroke: "#000", // 白色边框突出点
-      //   strokeWidth: 0.5,
-      // }),
+      Plot.dot(_data, {
+        x: "lon",
+        y: "lat",
+        r: 2, // 点大小
+        fill: "value", // 用value映射颜色
+        stroke: "#000", // 白色边框突出点
+        strokeWidth: 0.5,
+      }),
 
       // 2. 吉林边界线（红色强调）
       Plot.geo(jilin, {
