@@ -10,104 +10,78 @@
  * 2. 图例阈值等差或可熵减
  * */
 
+/**
+ * 1. 将数据按照阈值切割分组，那么实际渲染效果将直接跟阈值绑定而不是跟数据本身绑定
+ * 2. interval是将阈值按照什么精度切割分组。当一组数据存在差值较大时，会影响计算性能。如降水图例，最大值为200，最小有效值为0.1，此时interval设置为0.1，则会生成2000个分组，计算量较大，渲染性能会下降。这种情况在设置stroke时同样会有影响，表现时峰值和谷值处会出现多条等高线重叠的现象，影响视觉效果。
+ * */
+
 import { ref, onMounted } from "vue";
 import * as Plot from "@observablehq/plot";
-import temp from "./temp-11181742.json"; // 温度数据
-import temp1 from "./temp-11182136.json"; // 温度数据
-import temp2 from "./temp-max-11191636.json"; // 温度数据
-import temp3 from "./temp-11191647.json"; // 温度数据
-import temp4 from "./temp-11191730.json"; // 温度数据
-// import rhu from "./rhu-11181715.json";
-// import rhu from "./rhu-11182128.json";
 import jilin from "./jilin_province_boundary.json";
-import { TempLegend, VisLegend, PreLegend } from "./legends";
+import pre260107 from "./pre-260107.json";
 import axios from "axios";
 
-const list = [temp, temp1, temp2, temp3, temp4];
+//降水
+const PreLegend = {
+  name: "降水",
+  label: "降水量",
+  unit: "mm",
+  colors: [
+    [0, "rgb(255,255,255)"],
+    // [1, "rgb(167,242,137)"],
+    [0.1, "rgb(167,242,137)"],
+    [10, "rgb(60,186,60)"],
+    [25, "rgb(96,184,255)"],
+    [50, "rgb(0,0,255)"],
+    [100, "rgb(249,1,247)"],
+    [200, "rgb(129,0,64)"],
+  ],
+};
+
 const plotContainer = ref(null);
 
-// let len;
-// let idx=0;
-// let handle;
-// function update() {
-//   console.log(idx)
-//   idx++;
-//   if (idx >= len) {
-//     idx = 0;
-//     // cancelAnimationFrame(handle);
-//     handle = requestAnimationFrame(update);
-//   } else {
-//     handle = requestAnimationFrame(update);
-//   }
-// }
-
-async function render(index) {
-  // let dom = document.getElementsByTagName("svg")[0];
-  // if (dom) {
-  //   dom.remove();
-  // }
-  // const url = "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1,2&elementsCode=pre&code=pre_real";
-  // const url = "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/statisticalDataByTime?cntyCode=220000&siteTypeCode=1,2&code=statistical_pre_accumulate&startTime=2025-12-23+06:10:00&endTime=2025-12-23+08:10:00";
-  const url = "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/statisticalDataByTime?cntyCode=220000&siteTypeCode=1,2&code=statistical_pre_accumulate&startTime=2026-01-06+12:00:00&endTime=2026-01-07+08:00:00";
-  const res = await axios.get(url);
-  // const res = await liveData({
-  //   cntyCode: 220000,
-  //   siteTypeCode: 1,
-  //   elementsCode: "temp",
-  //   code: "temp_real",
-  // });
-  console.log(res.data.data);
-
-  // const res = { data: list[index] };
+async function render() {
+  const res = { data: {data:pre260107.data.slice(0,200)} };
   if (!plotContainer.value) return;
-  var _data = res.data.data.filter((item) => +item.value);
-  console.log(_data);
-  // _data.map((item) => {
-  //   item.value = Math.ceil(+item.value);
-  //   // item.value = Math.abs(+item.value);
-  //   // console.log(item.value);
-  // });
+  // var _data = res.data.data.filter((item) => +item.value);
+  let _data = res.data.data;
+  _data[0].value = 11;
+  let filteredData = _data.filter((item) => +item.value);
 
   const colorDomain = PreLegend.colors.map((item) => item[0]);
   const colorRange = PreLegend.colors.map((item) => item[1]);
-
   colorRange.unshift(PreLegend.colors[0][1]);
 
   console.time("time");
   const plot = Plot.plot({
-    // 视图尺寸（与容器一致）
-    width: 1062,
-    height: 598,
-
-    // 投影配置：强制吉林边界充满视图
+    width: 1960,
+    height: 1028,
     projection: {
-      type: "equirectangular", // 适配中国区域的投影
+      type: "equirectangular",
       domain: jilin,
     },
-
-    // 颜色配置（适配温度数据）
     color: {
-      // scheme: "viridis", // 适合温度的渐变色
-      label: "温度 (°C)",
+      label: "降水量 (°C)",
       type: "threshold", // linear ordinal threshold
       domain: colorDomain,
       range: colorRange,
       legend: true,
     },
-
     marks: [
-      // 1. 等高线热力图
       Plot.contour(_data, {
         smooth: true,
         x: "lon",
         y: "lat",
         fill: "value",
-        // interval: 4, // 等高线间隔（根据数据调整）
-        blur: 0,
+        interval: 0.1, // 等高线间隔（根据数据调整）
+        // blur: 1,
         stroke: "rgba(0,0,0,0.2)",
         strokeWidth: 0.5,
-        // clip: jilin,
-        // pixelSize: 6,
+        clip: jilin,
+        // pixelSize: 50,
+        // pixelSize: 12 / window.devicePixelRatio,
+
+        imageRendering: "smooth", // pixelated
       }),
       Plot.dot(_data, {
         x: "lon",
@@ -117,7 +91,16 @@ async function render(index) {
         stroke: "#000", // 白色边框突出点
         strokeWidth: 0.5,
       }),
-
+      Plot.text(filteredData, {
+        x: "lon",
+        y: "lat",
+        text: "value", // 要显示的文字字段
+        fill: "black",
+        fontSize: 12,
+        dx: 6, // 文字相对于圆点的x偏移（向右6px）
+        dy: 0, // 文字相对于圆点的y偏移（向下3px）
+        textAnchor: "start", // 文字对齐方式
+      }),
       // 2. 吉林边界线（红色强调）
       Plot.geo(jilin, {
         stroke: "#ff3333",
@@ -127,44 +110,11 @@ async function render(index) {
     ],
   });
   console.timeEnd("time");
-  console.log(plot);
-  // --------------------------
-  // 步骤4：渲染到容器
-  // --------------------------
   plotContainer.value.appendChild(plot);
-
-  var path = document
-    .getElementsByClassName("jilin-visualization")[0]
-    .getElementsByTagName("svg")[1]
-    .getElementsByTagName("g")[0]
-    .getElementsByTagName("path");
-  console.log(path, path.length);
-
-  // let idx = 0;
-  // setInterval(() => {
-  //   console.log(idx);
-  //   // for (let i = 0; i < path.length; i++) {
-  //   //   if (i === idx) {
-  //   //     path[i].style.opacity = 0;
-  //   //   } else {
-  //   //     path[i].style.opacity = 1;
-  //   //   }
-  //   // }
-  //   path[idx].style.opacity = 0;
-  //   idx++;
-  //   if (idx >= path.length) {
-  //     idx = 0;
-  //   }
-  // }, 500);
 }
 
-onMounted(async () => {
-  // let index = 0;
-  // setInterval(() => {
-  //   index = (index + 1) % list.length;
-  //   render(index);
-  // }, 500);
-  render(3);
+onMounted(() => {
+  render();
 });
 </script>
 

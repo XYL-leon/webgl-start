@@ -124,7 +124,7 @@ async function render(index) {
         interpolate: interpolateMethod,
         // interpolate: 'none', // 将每个样本分配给包含它的像素,可配合pixelSize使用
         pixelSize: 2,
-        // blur: 1,
+        blur: 0.1,
         clip: jilin,
       }),
 

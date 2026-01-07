@@ -9,7 +9,7 @@ const mockUsers = Mock.mock({
             'cityCode': '@string("6")',
             'lon|121-132.1-5': 1,
             'lat|40-47.1-5': 1,
-            'value': '@float(-20, 10, 0, 2)',
+            'value': '@float(0, 25, 0, 2)',
             'dateTime': '@date("yyyy-MM-dd HH:mm:ss")',
             'cityCn': '@city',
             "cnty": "@county",
