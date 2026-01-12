@@ -51,7 +51,7 @@ import RasterDemo from "./components/observablePlot/rasterDemo.vue";
     <!-- <Plot /> -->
     <!-- <Volcano /> -->
     <BlurredContours />
-    <BlurredContoursTest />
+    <!-- <BlurredContoursTest /> -->
     <RasterMarkDemo />
     <!-- <RasterDemo /> -->
     <!-- <IGRF90Contours /> -->

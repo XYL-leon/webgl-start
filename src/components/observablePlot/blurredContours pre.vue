@@ -28,16 +28,18 @@ async function render() {
   // const et = "2025-12-23+08:10:00";
   const st = "2026-01-11+09:00:00";
   const et = "2026-01-12+09:00:00";
-  const url = `http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/statisticalDataByTime?cntyCode=220000&siteTypeCode=1&code=statistical_pre_accumulate&startTime=${st}&endTime=${et}`;
+  const url = `http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/statisticalDataByTime?cntyCode=220000&siteTypeCode=1,2&code=statistical_pre_accumulate&startTime=${st}&endTime=${et}`;
   // const url = "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1&elementsCode=pre&code=pre_real";
   const res = await axios.get(url);
 
+  // const res = { data: { data: pre260107.data } };
   if (!plotContainer.value) return;
-  // res.data.data[0].value = 200;
+  // var _data = res.data.data.filter((item) => +item.value);
   let _data = res.data.data.map(item=>{
     item.value = +item.value;
     return item;
   });
+  // _data[0].value = 11;
   let filteredData = _data.filter((item) => +item.value);
 
   const colorDomain = PreLegend.colors.map((item) => item[0]);
@@ -61,12 +63,12 @@ async function render() {
     },
     marks: [
       Plot.contour(_data, {
-        smooth: true,
+        // smooth: true,
         x: "lon",
         y: "lat",
         fill: "value",
         interval: 0.1, // 等高线间隔（根据数据调整）
-        blur: 0.2, // 只有省站
+        // blur: 1, // 只有省站
         // blur:1,
         // stroke: "rgba(0,0,0,0.2)",
         // strokeWidth: 0.5,

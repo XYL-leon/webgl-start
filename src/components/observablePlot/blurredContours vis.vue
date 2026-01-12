@@ -18,7 +18,8 @@
 import { ref, onMounted } from "vue";
 import * as Plot from "@observablehq/plot";
 import jilin from "./jilin_province_boundary.json";
-import { PreLegend } from "./legends.js";
+import pre260107 from "./pre-2512230610-2512230810.json";
+import { VisLegend } from "./legends.js";
 import axios from "axios";
 
 const plotContainer = ref(null);
@@ -28,21 +29,24 @@ async function render() {
   // const et = "2025-12-23+08:10:00";
   const st = "2026-01-11+09:00:00";
   const et = "2026-01-12+09:00:00";
-  const url = `http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/statisticalDataByTime?cntyCode=220000&siteTypeCode=1&code=statistical_pre_accumulate&startTime=${st}&endTime=${et}`;
-  // const url = "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1&elementsCode=pre&code=pre_real";
+  // const url = `http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/statisticalDataByTime?cntyCode=220000&siteTypeCode=1,2&code=statistical_pre_accumulate&startTime=${st}&endTime=${et}`;
+  const url =
+    "http://10.92.14.202:8790/V1/weather/liveBroadcast/stationLive/liveData?cntyCode=220000&siteTypeCode=1,2&elementsCode=vis&code=vis_real";
   const res = await axios.get(url);
 
+  // const res = { data: { data: pre260107.data } };
   if (!plotContainer.value) return;
-  // res.data.data[0].value = 200;
-  let _data = res.data.data.map(item=>{
+  // var _data = res.data.data.filter((item) => +item.value);
+  let _data = res.data.data.map((item) => {
     item.value = +item.value;
     return item;
   });
   let filteredData = _data.filter((item) => +item.value);
+  console.log(_data.length,filteredData.length)
 
-  const colorDomain = PreLegend.colors.map((item) => item[0]);
-  const colorRange = PreLegend.colors.map((item) => item[1]);
-  colorRange.unshift(PreLegend.colors[0][1]);
+  const colorDomain = VisLegend.colors.map((item) => item[0]);
+  const colorRange = VisLegend.colors.map((item) => item[1]);
+  colorRange.unshift(VisLegend.colors[0][1]);
 
   console.time("time");
   const plot = Plot.plot({
@@ -60,14 +64,13 @@ async function render() {
       legend: true,
     },
     marks: [
-      Plot.contour(_data, {
-        smooth: true,
+      Plot.contour(filteredData, {
+        // smooth: true,
         x: "lon",
         y: "lat",
         fill: "value",
-        interval: 0.1, // 等高线间隔（根据数据调整）
-        blur: 0.2, // 只有省站
-        // blur:1,
+        interval: 1, // 等高线间隔（根据数据调整）
+        blur: 0.5, // 只有省站
         // stroke: "rgba(0,0,0,0.2)",
         // strokeWidth: 0.5,
         clip: jilin,
@@ -76,7 +79,7 @@ async function render() {
         // interpolate: "barycentric",
         imageRendering: "smooth", // pixelated
       }),
-      Plot.dot(_data, {
+      Plot.dot(filteredData, {
         x: "lon",
         y: "lat",
         r: 2, // 点大小
@@ -86,7 +89,7 @@ async function render() {
         channels: { 站名: "stationName", 站号: "stationIdC" },
         tip: true,
       }),
-      Plot.dot(_data, Plot.pointer({x: "lon", y: "lat", fill: "red", r: 8})),
+      Plot.dot(filteredData, Plot.pointer({ x: "lon", y: "lat", fill: "red", r: 8 })),
       Plot.text(filteredData, {
         x: "lon",
         y: "lat",

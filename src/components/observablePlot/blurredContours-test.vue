@@ -69,12 +69,10 @@ async function render(index) {
     elementsCode: "temp",
     code: "temp_real",
   });
-  console.log(res.data.data);
 
   // const res = { data: list[index] };
   if (!plotContainer.value) return;
   var _data = res.data.data.filter((item) => +item.value);
-  console.log(_data);
   // _data.map((item) => {
   //   item.value = Math.ceil(+item.value);
   //   // item.value = Math.abs(+item.value);
@@ -150,7 +148,6 @@ async function render(index) {
     ],
   });
   console.timeEnd("time");
-  console.log(plot);
   // --------------------------
   // 步骤4：渲染到容器
   // --------------------------
@@ -161,7 +158,6 @@ async function render(index) {
     .getElementsByTagName("svg")[1]
     .getElementsByTagName("g")[0]
     .getElementsByTagName("path");
-  console.log(path, path.length);
 
   // let idx = 0;
   // setInterval(() => {

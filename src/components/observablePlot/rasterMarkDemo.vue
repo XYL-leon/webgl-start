@@ -122,9 +122,10 @@ async function render(index) {
         y: "lat",
         fill: "value",
         interpolate: interpolateMethod,
+        // interval: 5,
         // interpolate: 'none', // 将每个样本分配给包含它的像素,可配合pixelSize使用
-        pixelSize: 2,
-        blur: 0.1,
+        pixelSize: 8,
+        // blur: 0.1,
         clip: jilin,
       }),
 
@@ -146,7 +147,6 @@ async function render(index) {
     ],
   });
   console.timeEnd("time");
-  console.log(plot);
   // --------------------------
   // 步骤4：渲染到容器
   // --------------------------
